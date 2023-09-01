@@ -1,0 +1,14 @@
+.search-container {
+    background-color: #F1F3F4;
+    max-width: 720px;
+}
+
+.search-global::placeholder {
+    color: #5F6368;
+    font-weight: 400;
+}
+
+.search-container:focus-within {
+    box-shadow: 0 0 8px lightgray;
+
+}
