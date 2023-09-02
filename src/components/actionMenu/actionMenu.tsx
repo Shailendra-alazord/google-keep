@@ -1,8 +1,10 @@
 //@ts-ignore
 import ActionButton from '@/components/actionButton/actionButton';
+import {useState} from 'react';
 
 // @ts-ignore
 export default function ActionMenu({ className, actionButtonList, defaultClass, iconHeight }) {
+  const [activeButton, setActiveButton] = useState('DEFAULT');
   return (
     <div className={className}>
       {actionButtonList.map((actionButton: any) => (
@@ -13,6 +15,8 @@ export default function ActionMenu({ className, actionButtonList, defaultClass, 
           handleAction={actionButton.handleAction}
           childComponent={actionButton.childComponent}
           iconHeight={iconHeight}
+          activeButton={activeButton}
+          setActiveButton={setActiveButton}
         />
       ))}
     </div>

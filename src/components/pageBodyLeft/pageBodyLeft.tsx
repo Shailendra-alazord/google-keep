@@ -10,7 +10,6 @@ export default function PageBodyLeft({ className, menuOpen }) {
   const handleClick = useCallback(() => {
     alert('functionality will be added soon');
   }, []);
-
   return (
     <div className={className}>
       <div className="sticky top-16 flex flex-col pt-2 w-fit hover:cursor-pointer left-pane-icons-container">

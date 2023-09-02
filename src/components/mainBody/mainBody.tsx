@@ -15,6 +15,7 @@ export default function MainBody({ className, noteListData, query }) {
   const toggleModal = useCallback(() => {
     setModalOpen(!modalOpen);
   }, [modalOpen]);
+
   const NoteListLayout = useMemo(
     () => (
       <NotesLayout
@@ -32,6 +33,8 @@ export default function MainBody({ className, noteListData, query }) {
     ),
     [layoutMode, modalNoteDispatch, noteListData, query, toggleModal]
   );
+  console.log('modal note changed', modalNote);
+  console.log('noteList check', noteListData);
   return (
     <div className={className}>
       {NoteListLayout}

@@ -1,26 +1,34 @@
-// @ts-ignore
+// @ts-nocheck
 import Image from 'next/image';
-import {useCallback, useState} from 'react'; // @ts-ignore
+import { useCallback, useRef } from 'react'; // @ts-ignore
 
-// @ts-ignore
-export default function ActionButton({ icon, handleAction, className, childComponent, iconHeight }) {
-  const [clicked, setClicked] = useState(false);
+export default function ActionButton({
+  icon,
+  handleAction,
+  className,
+  childComponent,
+  iconHeight,
+  activeButton,
+  setActiveButton,
+}) {
+  const ref = useRef(null);
+
   const handleClick = useCallback(
     (event: any) => {
       handleAction(icon.name);
-      setClicked(!clicked);
+      setActiveButton((prevState: any) => (prevState !== icon.name ? icon.name : 'DEFAULT'));
       console.log('clicked');
       event.preventDefault();
     },
-    [handleAction, clicked, icon.name]
+    [handleAction, setActiveButton, icon.name]
   );
 
   return (
     <div className="relative h-full flex items-center justify-center p-0.5">
-      <button className={className + ' ' + icon.name} onClick={handleClick}>
+      <button className={className + ' ' + icon.name} onClick={handleClick} ref={ref}>
         <Image src={icon.src} alt={icon.name} width={iconHeight} height={iconHeight} />
       </button>
-      {clicked && childComponent()}
+      {activeButton === icon.name && childComponent()}
     </div>
   );
 }

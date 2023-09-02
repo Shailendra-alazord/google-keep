@@ -20,13 +20,18 @@ export default function PageBodyRight({ className, query }) {
     }),
     [noteList, noteListDispatch]
   );
+  console.log('noteList modified', noteList, noteListData);
+  const mainBody = useMemo(
+    () => <MainBody className="grow main-body" noteListData={noteListData} query={query} />,
+    [noteListData, query]
+  );
 
   return (
     <div className={className}>
       {!searchMode && (
         <MainHeader className="flex items-center justify-center main-header" noteListData={noteListData} />
       )}
-      <MainBody className="grow main-body" noteListData={noteListData} query={query} />
+      {mainBody}
     </div>
   );
 }

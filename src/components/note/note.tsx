@@ -10,31 +10,32 @@ import {
   UNPINICON,
 } from '@/utils/constants';
 import ActionButton from '@/components/actionButton/actionButton';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import ActionMenu from '@/components/actionMenu/actionMenu';
 import ColorPalette from '@/components/colorPalette/colorPalette';
 import useNote from '@/utils/useNote';
 
 const bottomIcons = [ALERTICON, COLLABORATORICON, PALETTEICON, PHOTOICON, ARCHIVEICON, DELETEICON];
 // @ts-ignore
-export default function Note({ note, noteListData, className, toggleModalNote, layoutMode }) {
+export default function Note({ note: prevNote, noteListData, className, toggleModalNote, layoutMode }) {
+  console.log('note', prevNote);
   const { noteListDispatch } = noteListData;
-  const { note: currentNote, noteDispatch: currentNoteDispatch } = useNote(note);
-  //@ts-ignore
-  const [hovered, setHovered] = useState(false);
+  const { note, noteDispatch } = useNote(prevNote);
 
-  const noteData = useMemo(
-    () => ({ note: currentNote, noteDispatch: currentNoteDispatch }),
-    [currentNote, currentNoteDispatch]
-  );
+  useEffect(() => {
+    noteDispatch({ type: 'update', payload: prevNote });
+  }, [prevNote]);
+  //@ts-ignore
+
+  const noteData = useMemo(() => ({ note, noteDispatch }), [note, noteDispatch]);
 
   const deleteNote = useCallback(() => {
-    noteListDispatch({ type: 'delete-note', payload: currentNote });
-  }, [currentNote, noteListDispatch]);
+    noteListDispatch({ type: 'delete-note', payload: note });
+  }, [note, noteListDispatch]);
 
   const togglePin = useCallback(() => {
-    noteListDispatch({ type: 'toggle-pin', payload: currentNote });
-  }, [currentNote, noteListDispatch]);
+    noteListDispatch({ type: 'toggle-pin', payload: note });
+  }, [note, noteListDispatch]);
 
   const handleAction = useCallback(
     (icon: string) => {
@@ -56,12 +57,8 @@ export default function Note({ note, noteListData, className, toggleModalNote, l
   );
 
   const handleClick = useCallback(() => {
-    toggleModalNote(currentNote);
-  }, [currentNote, toggleModalNote]);
-
-  const toggleHover = useCallback(() => {
-    setHovered(!hovered);
-  }, [hovered]);
+    toggleModalNote(note);
+  }, [note, toggleModalNote]);
 
   const iconList = useMemo(
     () => [
@@ -111,41 +108,32 @@ export default function Note({ note, noteListData, className, toggleModalNote, l
     [deleteNote, noteData]
   );
   return (
-    <pre
-      className={className}
-      style={{ backgroundColor: currentNote.backgroundColor }}
-      onMouseEnter={toggleHover}
-      onMouseLeave={toggleHover}
-    >
+    <pre className={className} style={{ backgroundColor: note.backgroundColor }}>
       <div className={`flex h-6 note-title`}>
         <div onClick={handleClick} className="flex grow items-center font-medium note-title-label">
-          {note.title ?? 'Title'}
+          {prevNote.title}
         </div>
-        {hovered && (
-          <ActionButton
-            className="flex items-center justify-center h-8 aspect-square hover:rounded-full pin-btn"
-            handleAction={handleAction}
-            icon={note.pinned ? UNPINICON : PINICON}
-            iconHeight={24}
-            childComponent={() => {}}
-          />
-        )}
+
+        <ActionButton
+          className="flex items-center justify-center h-8 aspect-square hover:rounded-full pin-btn"
+          handleAction={handleAction}
+          icon={note.pinned ? UNPINICON : PINICON}
+          iconHeight={24}
+          childComponent={() => {}}
+        />
       </div>
       <div className={`flex grow py-2 note-body`} onClick={handleClick}>
-        {note.body}
+        {prevNote.body}
       </div>
-      {hovered ? (
-        <ActionMenu
-          className={`flex h-8 items-center ${
-            layoutMode === 'GRID' ? 'justify-between' : 'justify-start gap-5'
-          } note-icon-list`}
-          iconHeight={18}
-          defaultClass="relative flex item-center justify-center h-full aspect-square hover:rounded-full bottom-icons"
-          actionButtonList={iconList}
-        />
-      ) : (
-        <div className="h-8 w-full"></div>
-      )}
+
+      <ActionMenu
+        className={`flex h-8 items-center ${
+          layoutMode === 'GRID' ? 'justify-between' : 'justify-start gap-5'
+        } note-icon-list`}
+        iconHeight={18}
+        defaultClass="relative flex item-center justify-center h-full aspect-square hover:rounded-full note-bottom-icons"
+        actionButtonList={iconList}
+      />
     </pre>
   );
 }

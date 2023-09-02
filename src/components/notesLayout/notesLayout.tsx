@@ -1,4 +1,3 @@
-import {useCallback} from 'react';
 import Note from '@/components/note/note'; // @ts-ignore
 import './notesLayout.css';
 import filterNoteList from '@/utils/filterNoteList';
@@ -8,15 +7,13 @@ export default function NotesLayout({ className, noteListData, toggleModal, moda
   const filteredList = filterNoteList(noteList, query);
   const noteListPinned = filteredList.filter((note: { pinned: any }) => note.pinned);
   const noteListOthers = filteredList.filter((note: { pinned: any }) => !note.pinned);
-
-  const handleClick = useCallback(
-    (note: any) => {
-      modalNoteDispatch({ type: 'update', payload: note });
-      toggleModal();
-    },
-    [modalNoteDispatch, toggleModal]
-  );
-  console.log(noteList);
+  console.log('notelist pinned changed', noteListPinned);
+  const handleClick = (note: any) => {
+    console.log('modal note set to', note);
+    toggleModal();
+    modalNoteDispatch({ type: 'update', payload: note });
+  };
+  console.log('check noteList data', noteListData);
   return (
     <div className={className}>
       {noteListPinned.length > 0 && (
