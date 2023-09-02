@@ -1,0 +1,7 @@
+.note-maker {
+    box-shadow: 0 2px 4px grey;
+}
+
+.note-maker button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}

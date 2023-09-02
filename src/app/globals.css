@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+    min-height: 100vh;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,16 @@
+.note-container:hover {
+    box-shadow: 0 0 8px lightgray;
+}
+
+.pin-btn, .note-bottom-icons {
+    display: none;
+}
+
+.note-container:hover .pin-btn, .note-container:hover .note-bottom-icons {
+    display: flex;
+}
+
+.note-container button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
